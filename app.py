@@ -1,11 +1,13 @@
 from flask import Flask, request
 from transform import Transform
+from cache import Cache
+import os
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+CACHE_CAPACITY = 100
 
 __author__ = 'Jordan Vaughn'
 app = Flask(__name__)
-
 
 def valid_extension(filename):
     return '.' in filename and \
@@ -23,14 +25,18 @@ def upload_file():
     file = request.files['file']
 
     if file and valid_extension(file.filename):
-        print(type(file))
-        im = Transform.load_image(Transform, file)
-        grayscale = Transform.grayscale_image(Transform, im)
-        resized_image = Transform.resize_image(Transform, grayscale)
-        art = Transform.convert_image_to_ascii(Transform, resized_image)
-        for line in art:
-            print(line)
-        return {'sucess': 'true', 'message': art}, 200
+        cache = Cache(CACHE_CAPACITY)
+
+        if cache.get(file.filename) != -1:
+            print('Found in cache')
+            return {'sucess': 'true', 'message': cache.get(file.filename)}, 200
+        else:    
+            im = Transform.load_image(Transform, file)
+            grayscale = Transform.grayscale_image(Transform, im)
+            resized_image = Transform.resize_image(Transform, grayscale)
+            art = Transform.convert_image_to_ascii(Transform, resized_image)
+            cache.put(file.filename, art)
+            return {'sucess': 'true', 'message': art}, 200
 
 if __name__ == '__main__':
     app.run(debug=True)

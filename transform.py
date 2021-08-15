@@ -39,5 +39,3 @@ class Transform():
 
     def close_image(self, image):
         image.close()
-
-#pixels = img.getdata()
