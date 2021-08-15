@@ -1,0 +1,21 @@
+# Please see the screenshot title Part_3.JPG, the document was in a semi-unreadable format.
+1. The performance is acceptable, I would want to enhance the caching if this were to he used at scale.
+2. I would use a caching solution like Redis. I could also scale the service horizontally and sit
+it behind a load balancer, or split the caching and conversion between two microservices. I would also break
+the hashing algorithm out into a separate service.
+3. I would upload the images with a separate service from converting it to ASCII art. I could run
+both in parallel using the Python Thread library.
+4. Redis could potentially be free if I ran it on the same server, the ALB and horizontal scaling
+options would increase costs. Splitting the caching and conversion into separate microcservices 
+would increase costs if I ran them on separate servers.
+5. Constantly writing to and reading from a single text file, I would mitigate this by utilizing a caching service.
+6. If this means the changes from #5, I would need to ensure that a single cache was used, or sticky sessions.
+7. The caching solution could be implemented with any API. I could address data consistency and failures
+by using a load balancer distributing traffic between my old and new cloud providers and a blue green deployment
+model, shifting a small percentage of my traffic to the new server to ensure functionality, before 
+completely swapping to my new cloud provider. If I were using Redis, I could migrate keys by using the Redis CLI, 
+migrating against my text files would be more difficult. Traffic would continue after I copied the cache and there would
+be inconsistencies between the two lists. To address this I could use a cookie to implement sticky sessions -after 
+migrating the text file cache- to direct traffic to the new server and then after I was satisfied with the new server
+I would use a script to migrate/reconcile the two caches. A text based cache is obviously not an ideal solution to an 
+enterprise level service.
