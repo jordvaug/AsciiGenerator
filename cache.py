@@ -2,6 +2,7 @@ import os
 from sys import path, platform
 import pathlib
 import json
+import hashlib
 
 class Cache():
 
@@ -71,7 +72,6 @@ class Cache():
             else:
                 self.order_cache(key)
                 self.cache[key] = value
-
         else:
             if self.cache.get(key) != None:
                 self.order_cache(key)
@@ -120,3 +120,6 @@ class Cache():
         with open(my_priority, 'w') as f:
             for line in self.priority:
                 f.write(line + "\n")
+
+    def hash_name(self, file):
+        return hashlib.sha256(file.read()).hexdigest()

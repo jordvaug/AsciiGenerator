@@ -25,17 +25,17 @@ def upload_file():
     file = request.files['file']
 
     if file and valid_extension(file.filename):
-        cache = Cache(CACHE_CAPACITY)
-
-        if cache.get(file.filename) != -1:
+        cache = Cache(CACHE_CAPACITY)       
+        hashed_key = cache.hash_name(file)
+        if cache.get(hashed_key) != -1:
             print('Found in cache')
-            return {'sucess': 'true', 'message': cache.get(file.filename)}, 200
-        else:    
-            im = Transform.load_image(Transform, file)
+            return {'sucess': 'true', 'message': cache.get(hashed_key)}, 200
+        else:
+            im = Transform.load_image(Transform, file) 
             grayscale = Transform.grayscale_image(Transform, im)
             resized_image = Transform.resize_image(Transform, grayscale)
             art = Transform.convert_image_to_ascii(Transform, resized_image)
-            cache.put(file.filename, art)
+            cache.put(hashed_key, art)
             return {'sucess': 'true', 'message': art}, 200
 
 if __name__ == '__main__':
