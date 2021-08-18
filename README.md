@@ -41,7 +41,3 @@ The postman collection can be imported as json from the Postman.json file in thi
 
     Postman collection at:
     https://www.getpostman.com/collections/a85708a209d590b1d041
-
-
-### Library Considerations
-Flask was used to build this application due to its ability to rapidly deploy simple applications with built in debugging and unit test aiding, as the author's say: "Flask aims to keep the core simple but extensible". Flask has a strong community behind it -with 56k stars on their github project- and has been in development since 2004. It is a mature framework in use by large companies like LinkedIn and Pinterest.
