@@ -36,6 +36,8 @@ def upload_file():
             resized_image = Transform.resize_image(Transform, grayscale)
             art = Transform.convert_image_to_ascii(Transform, resized_image)
             cache.put(hashed_key, art)
+            for line in art:
+                print(line)
             return {'sucess': 'true', 'message': art}, 200
 
 if __name__ == '__main__':
